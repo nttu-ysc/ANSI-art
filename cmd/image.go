@@ -5,7 +5,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+	http://www.apache.org/licenses/LICENSE-2.0
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
@@ -17,10 +17,11 @@ package cmd
 
 import (
 	"fmt"
+	"log"
+
 	"github.com/EtoDemerzel0427/ANSI-art/art"
 	"github.com/disintegration/imaging"
 	"github.com/spf13/cobra"
-	"log"
 )
 
 var (
@@ -32,6 +33,7 @@ var (
 	imgContrast  float64
 	imgAsciiMode bool
 	imgSigma     float64
+	imgRawString bool
 )
 
 // imageCmd represents the image command
@@ -63,6 +65,10 @@ var imageCmd = &cobra.Command{
 		src = as.TuneImage(src)
 
 		fmt.Print(art.ClearScreen())
+		if imgRawString {
+			fmt.Printf("%q\n", as.Convert(src))
+			return
+		}
 		fmt.Println(as.Convert(src))
 	},
 }
@@ -78,7 +84,6 @@ func init() {
 	imageCmd.Flags().Float64VarP(&imgSigma, "sigma", "S", 0., "sharpening factor")
 	imageCmd.Flags().StringVarP(&imgSeq, "seq", "s",
 		"01", "the string of ANSI chars that build the image")
-
-
+	imageCmd.Flags().BoolVarP(&imgRawString, "raw", "r", false, "output raw string")
 
 }
